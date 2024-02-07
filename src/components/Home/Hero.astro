@@ -1,15 +1,45 @@
 ---
 import Container from "../Container.astro";
+import Avatar from "../Avatar.astro";
+
+const gitHubAvatar = "https://avatars.githubusercontent.com/u/78957607?v=4"
 ---
 
-<Container classTailwind="flex justify-evenly" name="Pakito">
-    <div>
-        <h1 class="text-6xl font-bold dark:text-slate-100">JORGE ALBARRACÍN</h1>
-        <h2 class="text-4xl dark:text-slate-100">Full stack developer</h2>
+<Container classTailwind="flex flex-col justify-evenly" name="Pakito">
+    <div class="flex flex-row gap-6 sm:gap-0 sm:justify-evenly">        
+        <div>
+            <h1 class="text-3xl md:text-4xl xl:text-5xl font-bold dark:text-slate-100 ">JORGE ALBARRACÍN</h1>
+            <h2 class="text-xl md:text-2xl xl:text-3xl dark:text-slate-100">Full Stack Developer</h2>
+        </div>
+        <img
+            src={gitHubAvatar}
+            alt=""
+            class="rounded-full shadow-lg dark:shadow-zinc-800 w-32 h-32 xl:w-48 xl:h-48"
+        />
     </div>
-    <img
-        src="https://avatars.githubusercontent.com/u/78957607?v=4"
-        alt=""
-        class="rounded-full shadow-xl w-36 h-36 xl:w-48 xl:h-48"
-    />
+    <div class="flex justify-evenly mt-12 xl:mt-24 items-end">
+        <div class="hidden md:block">
+            <Avatar/>
+        </div>
+        <article class="sm:w-3/4 md:max-w-prose text-sm md:text-base xl:text-lg">
+            <p>
+                Buenas! Mi nombre es Jorge Albarracín, muchos me conocen como Coco. Inicié en la programación
+                desde el colegio secundario realizando mods para el videojuego Hearts of Iron IV 😂.
+            </p>
+            <p class="mt-8">
+                Desde entonces mi curiosidad y aprendizaje no ha parado y hoy en día he 
+                llegado icnluso a liderar equipos de desarrollo.
+            </p>
+            <p class="mt-8">
+                Mi fuerte es el análisis y desarrollo web (tanto frontend como backend) y he trabajado
+                con clientes en calidad freelance y con agencias creativas en conjunto con clientes internacionales.
+            </p>
+        </article>
+    </div>
 </Container>
+
+<style>
+  h1{
+    font-family: 'Nothing You Could Do', cursive;;
+  }
+</style>

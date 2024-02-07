@@ -1,4 +1,28 @@
-<div>
-    <a href="">LinkedIn</a>
-    <a href="">GitHub</a>
+---
+import { Image } from "astro:assets";
+const {
+    linkedin,
+    github,
+    linkedInLogo,
+    gitHubLogo
+} = Astro.props;
+
+---
+<div class="flex">
+    <a href={linkedin}>
+        <Image
+            class="dark:filter dark:invert"
+            src={linkedInLogo}
+            alt="linkedin logo"
+            width={40}
+        />
+    </a>
+    <a href={github}>
+        <Image
+            class="dark:filter dark:invert"
+            src={gitHubLogo}
+            alt="github logo"
+            width={40}
+        />
+    </a>
 </div>
