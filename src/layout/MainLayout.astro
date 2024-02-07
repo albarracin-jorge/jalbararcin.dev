@@ -1,6 +1,6 @@
 ---
 import Media from "../components/Layout/Media.astro";
-
+import jalbarracinSocial from "../assets/jalbarracuin-website-social.png"
 import linkedInLogo from "../assets/linkedin.svg";
 import gitHubLogo from "../assets/github.svg";
 
@@ -13,6 +13,14 @@ const github = "https://github.com/albarracin-jorge";
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta property="og:title" content="JAlbarracín | Desarrollador Full Stack" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://jalbarracin.dev" />
+		<meta property="og:description" content="Bienvenido a mi sitio web, aquí encontraras información sobre mi carrerra profesional." />
+	
+		<meta property="og:image" content={jalbarracinSocial.toString()} />
+	
+		<meta property="og:image:alt" content="JAlbarracín | Desarrollador Full Stack" />
 		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
 		<title>JAlbarracin | Full Stack Developer</title>
 	</head>
