@@ -1,39 +1,12 @@
 ---
 import MainLayout from "../layout/MainLayout.astro";
 import Hero from "../components/Home/Hero.astro";
-import Experience from "../components/Home/Experience.astro";
-import aenimaLogo from "../assets/aenima-logo.png"
-import coderhouseLogo from "../assets/coderhouse-logo.png"
+import ListExperience from "../components/Home/ListExperience.astro";
+import Contact from "../components/Home/Contact.astro"
 ---
 
 <MainLayout>
 	<Hero />
-	<section class="flex flex-col gap-8 justify-center max-w-lg mx-auto mb-12">
-		<Experience
-			company="Aenima Agency"
-			years="Septiembre 2021 - present"
-			role="Desarrollador Full Stack"
-			description="Empecé desarrollando sitios web en PHP, mantuve sitios y migraciones en Wordpress y gestioné bases de datos MySQL. Luego transicioné al stack MERN y actualmente utilizo React, TypeScript y Node.js en mi día a día."
-			icon={aenimaLogo}	
-		/>
-		<Experience
-			company="Aenima Agency"
-			years="Mayo 2023 - Presente"
-			role="Líder Técnico IT"
-			description="Gestiono y coordino al equipo de desarrollo, también participo en estrategias con otras áreas de la empresa y colaboro con los nuevos proyectos aportando soluciones a los clientes."
-			icon={aenimaLogo}	
-		/>
-		<Experience
-			company="Coder House"
-			years="Diciembre 2022 - Junio 2023"
-			role="Tutor - Programación Backend"
-			description="Participé en las mentorías de los alumnos de la comisión donde trabajé. Asistí a los alumnos con las dudas que tenían, impulsandolos y motivandolos durante el cursado."
-			icon={coderhouseLogo}	
-		/>
-		<Experience
-			company="Freelance"
-			years="Enero 2021 - Presente"
-			description="Desde segundo año de unviersidad comencé a trabajar como desarrollador independiente, realizando desde SPA hasta E-Commerce (mi herramienta favorita para desarrollar es Svelte 🙂)"
-		/>
-	</section>
+	<ListExperience/>
+	<Contact />
 </MainLayout>
