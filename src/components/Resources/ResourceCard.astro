@@ -1,0 +1,27 @@
+---
+import { Image } from "astro:assets";
+
+const { title, urlResource, imageResource, description} = Astro.props
+
+// const response = await fetch(urlResource)
+// const data = await response.text()
+
+---
+<article class="
+	 w-[360px] border-b-2 
+	 border-stone-300 dark:border-zinc-800
+	 hover:shadow-2xl
+">
+	<a href={urlResource} target="_blank" class="flex flex-row items-center gap-2">
+		<Image
+			src={imageResource}
+			alt="resource preview"
+			width={40}
+			height={40}
+		/>
+		<div class="py-4">
+			<h2 class="text-lg md:text-xl">{title}</h2>
+			<p class="text-xs">{description}</p>
+		</div>
+	</a>
+</article>
