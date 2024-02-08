@@ -1,27 +1,31 @@
 ---
 import { Image } from "astro:assets";
 const { urlImage, title, link, description, tools } = Astro.props;
-console.log(tools);
 
 ---
-<a href={link} target="_blank"
-	class=""
->
-	<!-- <Image
-		src={urlImage}
-		alt={title}
-	/> -->
-	<div>
-		<h2>{title}</h2>
-		<p>{description}</p>
+<article class="bg-stone-200 dark:bg-zinc-800 rounded-t-xl hover:shadow-2xl max-w-sm mx-auto">
+	<a href={link} target="_blank"
+		class="object-cover"
+	>
+		<Image
+			src={urlImage}
+			alt={title}
+			class="object-cover w-auto rounded-t-xl"
+		/>
+	</a>
+	<div class="p-4">
+		<h2 class="text-xl">{title}</h2>
+		<hr class="my-2 opacity-30">
+		<p class="text-xs md:text-sm">{description}</p>
+		<hr class="my-2 opacity-30">
 		{
 			tools ?
 			<ul>
 				{tools.map((tool: string)=>(
-					<li>{tool}</li>
-				))}
-			</ul> :
-			<></>
-		}
+					<li class="text-xs md:text-sm">{tool}</li>
+					))}
+					</ul> :
+					<></>
+				}
 	</div>
-</a>
+</article>
