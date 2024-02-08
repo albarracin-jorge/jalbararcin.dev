@@ -1,6 +1,5 @@
 ---
 import Media from "../components/Layout/Media.astro";
-import jalbarracinSocial from "../assets/jalbarracin-website-social.png"
 import linkedInLogo from "../assets/linkedin.svg";
 import gitHubLogo from "../assets/github.svg";
 
@@ -18,7 +17,7 @@ const github = "https://github.com/albarracin-jorge";
 		<meta property="og:url" content="https://jalbarracin.dev" />
 		<meta property="og:description" content="Bienvenido a mi sitio web, aquí encontraras información sobre mi carrerra profesional." />
 	
-		<meta property="og:image" content="jalbarracin-website-social.png" />
+		<meta property="og:image" content="https://jalbarracin.dev/jalbarracin-website-social.png" />
 	
 		<meta property="og:image:alt" content="JAlbarracín | Desarrollador Full Stack" />
 		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
@@ -26,15 +25,23 @@ const github = "https://github.com/albarracin-jorge";
 	</head>
 	<body class="bg-stone-200 dark:bg-zinc-900 dark:text-slate-100">
 		<header
-			class="h-16 xl:h-20 shadow-xl bg-stone-300 dark:bg-zinc-800 flex justify-around items-center"
-		>
-			<h3 class="dark:text-slate-100 text-xl">jalbarracin.dev</h3>
-			<Media 
-				linkedin={linkedin}
-				github={github}
-				linkedInLogo={linkedInLogo}
-				gitHubLogo={gitHubLogo}
-			/>
+			class="h-16 xl:h-20 shadow-xl bg-stone-300 dark:bg-zinc-800"
+		>	
+			<div class="max-w-6xl pt-3 lg:pt-4 mx-auto flex justify-around items-center">
+				<div class="flex items-center gap-4">
+					<a href="/" class="dark:text-slate-100 text-2xl md:text-3xl hover:border-b-[1px]">jalbarracin.dev</a>
+					<div>
+						<a class="hover:border-b-[1px] md:mx-1" href="/projects">Proyectos</a>
+						<a class="hover:border-b-[1px] md:mx-1" href="/resources">Recursos</a>
+					</div>
+				</div>
+				<Media 
+					linkedin={linkedin}
+					github={github}
+					linkedInLogo={linkedInLogo}
+					gitHubLogo={gitHubLogo}
+				/>
+			</div>
 		</header>
 		<div class="mx-4">
 			<slot />
@@ -48,6 +55,5 @@ const github = "https://github.com/albarracin-jorge";
 
 	body {
 		font-family:'Source Serif 4', serif;
-
 	}
 </style>

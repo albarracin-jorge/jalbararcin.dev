@@ -1,0 +1,27 @@
+---
+import { Image } from "astro:assets";
+const { urlImage, title, link, description, tools } = Astro.props;
+console.log(tools);
+
+---
+<a href={link} target="_blank"
+	class=""
+>
+	<!-- <Image
+		src={urlImage}
+		alt={title}
+	/> -->
+	<div>
+		<h2>{title}</h2>
+		<p>{description}</p>
+		{
+			tools ?
+			<ul>
+				{tools.map((tool: string)=>(
+					<li>{tool}</li>
+				))}
+			</ul> :
+			<></>
+		}
+	</div>
+</a>
