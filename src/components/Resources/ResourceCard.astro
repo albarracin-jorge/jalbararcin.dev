@@ -9,16 +9,19 @@ const { title, urlResource, imageResource, description} = Astro.props
 ---
 <article class="
 	 w-[360px] border-b-2 
-	 border-stone-300 dark:border-zinc-800
-	 hover:shadow-2xl
+	 border-stone-300 hover:border-stone-400 dark:border-zinc-800 dark:hover:border-zinc-700
 ">
 	<a href={urlResource} target="_blank" class="flex flex-row items-center gap-2">
-		<Image
-			src={imageResource}
-			alt="resource preview"
-			width={40}
-			height={40}
-		/>
+		{
+			imageResource ?
+			<Image
+				src={imageResource}
+				alt="resource preview"
+				width={36}
+				height={36}
+			/> :
+			<p class="text-3xl">📁</p>
+		}
 		<div class="py-4">
 			<h2 class="text-lg md:text-xl">{title}</h2>
 			<p class="text-xs">{description}</p>
