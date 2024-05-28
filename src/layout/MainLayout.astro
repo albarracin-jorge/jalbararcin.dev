@@ -1,5 +1,5 @@
 ---
-import Media from "../components/Layout/Media.astro";
+import SocialMedia from "../components/Layout/SocialMedia.astro";
 import linkedInLogo from "../assets/linkedin.svg";
 import gitHubLogo from "../assets/github.svg";
 
@@ -23,19 +23,19 @@ const github = "https://github.com/albarracin-jorge";
 		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
 		<title>JAlbarracin | Full Stack Developer</title>
 	</head>
-	<body class="bg-stone-200 dark:bg-zinc-900 dark:text-slate-100">
+	<body class="bg-slate-200 dark:bg-slate-900 dark:text-slate-100">
 		<header
-			class="h-16 xl:h-20 shadow-xl bg-stone-300 dark:bg-zinc-800"
+			class="h-16 xl:h-20 shadow-xl bg-slate-300 dark:bg-slate-950"
 		>	
-			<div class="mx-auto md:w-[60vw] md:mx-[20vw] pt-3 lg:pt-5 flex justify-around items-center">
+			<div class="mx-auto md:w-[60vw] md:mx-[20vw] pt-3 lg:pt-4 flex justify-around items-center">
 				<div class="flex items-center gap-4">
-					<a href="/" class="dark:text-slate-100 text-2xl md:text-4xl hover:border-b-[1px] hover:border-zinc-900 dark:hover:border-slate-100">jalbarracin.dev</a>
+					<a href="/" class="dark:text-slate-100 text-2xl md:text-4xl hover:border-b-[1px] hover:mb-[-1px] hover:border-zinc-900 dark:hover:border-slate-100">jalbarracin.dev</a>
 					<div>
 						<a class="hover:border-b-[1px] hover:border-zinc-900 dark:hover:border-slate-100 md:mx-1 text-sm md:text-base" href="/projects">Proyectos</a>
 						<a class="hover:border-b-[1px] hover:border-zinc-900 dark:hover:border-slate-100 md:mx-1 text-sm md:text-base" href="/resources">Recursos</a>
 					</div>
 				</div>
-				<Media 
+				<SocialMedia 
 					linkedin={linkedin}
 					github={github}
 					linkedInLogo={linkedInLogo}
@@ -43,17 +43,30 @@ const github = "https://github.com/albarracin-jorge";
 				/>
 			</div>
 		</header>
-		<main class="mx-4 mb-12">
-			<slot />
+		<main class="">
+			<div class="col-1"></div>
+			<div class="col-2 rounded-sm mb-4"><slot /></div>
+			<div class="col-3"></div>
 		</main>
 	</body>
 </html>
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz@8..60&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 	body {
-		font-family:'Source Serif 4', serif;
+		font-family:'Open Sans', sans-serif;
+	}
+
+	main{
+		display: grid;
+		grid-template-columns: .3fr 1fr .3fr;
+	}
+	.col-1{
+		background-color: pink;
+	}
+	.col-3{
+		background-color: pink;
 	}
 </style>
