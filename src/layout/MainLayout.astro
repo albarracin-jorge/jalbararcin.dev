@@ -23,9 +23,9 @@ const github = "https://github.com/albarracin-jorge";
 		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
 		<title>JAlbarracin | Full Stack Developer</title>
 	</head>
-	<body class="bg-slate-200 dark:bg-slate-900 dark:text-slate-100">
+	<body class="bg-slate-200 dark:bg-slate-900 dark:text-slate-100 flex flex-col min-h-screen">
 		<header
-			class="h-16 xl:h-20 shadow-xl bg-slate-300 dark:bg-slate-950"
+			class="h-[7vh] xl:h-20 shadow-header dark:shadow-dark-header bg-slate-300 dark:bg-slate-950 relative z-10"
 		>	
 			<div class="mx-auto md:w-[60vw] md:mx-[20vw] pt-3 lg:pt-4 flex justify-around items-center">
 				<div class="flex items-center gap-4">
@@ -43,12 +43,10 @@ const github = "https://github.com/albarracin-jorge";
 				/>
 			</div>
 		</header>
-		<main class="">
-			<div class="rounded-md m-3 border-2 border-slate-950 bg-slate-500">
-				<div class="pulse"></div>
-			</div>
+		<main class="flex-grow min-h-full">
+			<div class="md:bg-slate-300 md:dark:bg-slate-950 md:shadow-main-l md:dark:shadow-dark-main-l "></div>
 			<div class=""><slot /></div>
-			<div class="rounded-md m-3 border-2 border-slate-950"></div>
+			<div class="md:bg-slate-300 md:dark:bg-slate-950 md:shadow-main-r md:dark:shadow-dark-main-r"></div>
 		</main>
 	</body>
 </html>
@@ -61,22 +59,13 @@ const github = "https://github.com/albarracin-jorge";
 		font-family:'Open Sans', sans-serif;
 	}
 
-	main{
-		display: grid;
-		grid-template-columns: .3fr 1fr .3fr;
+	@media (min-width: 768px){
+		main{
+			display: grid;
+			grid-template-columns: .3fr 1fr .3fr;
+		}
 	}
-	.pulse{
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		background-color: aquamarine;
-		transition: background .5s, scale 2s;
-		/* loop transition */
-		animation: pulse 2s infinite;
-	}
-
-	.pulse:hover{
-		scale: 1.5;
-		background: gold;
+	.shadow-main-content{
+		box-shadow: 24px 0 10px 5px ;
 	}
 </style>

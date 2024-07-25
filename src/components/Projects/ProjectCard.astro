@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 const { urlImage, title, link, description, tools } = Astro.props;
 
 ---
-<article class="bg-stone-300 dark:bg-zinc-800 rounded-t-xl hover:shadow-2xl max-w-sm mx-auto">
+<article class="bg-slate-300 dark:bg-slate-950 rounded-t-xl hover:shadow-2xl max-w-sm mx-auto">
 	<a href={link} target="_blank"
 		class="object-cover"
 	>
@@ -14,9 +14,9 @@ const { urlImage, title, link, description, tools } = Astro.props;
 		/>
 		<div class="p-4">
 			<h2 class="text-xl">{title}</h2>
-			<hr class="my-2 border-stone-500 dark:border-zinc-700">
+			<hr class="my-2 border-slate-500 dark:border-slate-700">
 			<p class="text-xs md:text-sm">{description}</p>
-			<hr class="my-2 border-stone-500 dark:border-zinc-700">
+			<hr class="my-2 border-slate-500 dark:border-slate-700">
 			{
 				tools ?
 				<ul>
