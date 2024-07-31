@@ -4,8 +4,10 @@ export default {
 	theme: {
 		extend: {
 			boxShadow: {
-				'header': '0 24px 24px 0 rgb(203 213 225 / var(--tw-bg-opacity))',
-				'dark-header': '0 24px 24px 0 rgb(2 6 23 / var(--tw-bg-opacity))',
+				'header': '0 4px 8px 0 rgb(203 213 225 / var(--tw-bg-opacity))',
+				'dark-header': '0 4px 2px 0 rgb(2 6 23 / var(--tw-bg-opacity))',
+				'main-center': 'inset 0 0 48px 0px rgb(226 232 240 / var(--tw-bg-opacity))',
+				'dark-main-center': 'inset 24px 0 12px 4px rgb(15 23 42 / var(--tw-bg-opacity))',
 				'main-l': 'inset -48px 0 48px -12px rgb(226 232 240 / var(--tw-bg-opacity))',
 				'dark-main-l': 'inset -48px 0 48px -12px rgb(15 23 42 / var(--tw-bg-opacity))',
 				'main-r': 'inset 48px 0 48px -12px rgb(226 232 240 / var(--tw-bg-opacity))',
