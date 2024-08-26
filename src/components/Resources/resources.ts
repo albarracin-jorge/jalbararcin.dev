@@ -72,6 +72,10 @@ const ResourceList = [
 		urlResource: 'https://layout.bradwoods.io/customize',
 		description: 'CSS layout generator with customizable options.',
 		imageResource: 'https://layout.bradwoods.io/apple-touch-icon.png',
+	},
+	{
+		title: 'Magic Pattern',
+		urlResource: 'https://www.magicpattern.design/',
 	}
 ]
 

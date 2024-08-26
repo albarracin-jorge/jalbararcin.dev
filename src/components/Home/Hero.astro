@@ -4,8 +4,7 @@ import Avatar from "../Avatar.astro";
 
 const gitHubAvatar = "https://avatars.githubusercontent.com/u/78957607?v=4"
 ---
-
-<Container classTailwind="flex flex-col justify-evenly mx-4 md:mx-auto" name="Pakito">
+<Container classTailwind="flex flex-col justify-evenly mx-4 md:mx-auto">
     <div class="flex flex-row gap-6 sm:gap-0 sm:justify-evenly ">        
         <div>
             <h1 class="text-3xl md:text-4xl xl:text-5xl font-bold dark:text-slate-100 ">JORGE ALBARRACÍN</h1>
@@ -31,4 +30,31 @@ const gitHubAvatar = "https://avatars.githubusercontent.com/u/78957607?v=4"
   h1{
     font-family: 'Nothing You Could Do', cursive;;
   }
+  .rotating-border-card {
+  width: 300px;
+  height: 200px;
+  position: relative;
+  padding: 4px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, rgb(8 15 32), rgb(8 15 32));
+  animation: rotate 4s linear infinite;
+}
+
+.card-content {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 6px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>
