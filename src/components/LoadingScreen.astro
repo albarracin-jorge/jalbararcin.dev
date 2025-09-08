@@ -1,0 +1,189 @@
+---
+---
+
+<div id="loading-screen" class="loading-screen">
+  <div class="loading-columns">
+    <div class="bg-zinc-950 flex items-end loading-column" id="column-1">
+      <div class="bg-indigo-400 shadow-zinc-950 relative -bottom-[100vh] w-full h-full "></div>
+    </div>
+    <div class="bg-zinc-950 flex items-end loading-column" id="column-2">
+      <div class="bg-indigo-500 shadow-zinc-950 relative -bottom-[100vh] w-full h-full "></div>
+    </div>
+    <div class="bg-zinc-950 flex items-end loading-column loading-content" id="column-3">
+      <pre class="relative top-[40%]" id="count">0</pre>
+      <div class="loading-bar relative top-[40%]" id="loading-bar">
+        <div id="progress-bar" class="bg-indigo-500 progress-bar"></div>
+      </div>
+      <div class="bg-indigo-600 shadow-zinc-950 relative -bottom-[100vh] w-full h-full "></div>
+    </div>
+    <div class="bg-zinc-950 flex items-end loading-column" id="column-4">
+      <div class="bg-indigo-700 shadow-zinc-950 relative -bottom-[100vh] w-full h-full "></div>
+    </div>
+    <div class="bg-zinc-950 flex items-end loading-column" id="column-5">
+      <div class="bg-indigo-800 shadow-zinc-950 relative -bottom-[100vh] w-full h-full "></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { animate, stagger } from "motion";
+
+  function initLoadingScreen() {
+    const counterElement = document.getElementById('count');
+    const progressBarElement = document.getElementById('progress-bar');
+    const loadingScreenElement = document.getElementById('loading-screen');
+    
+    if(counterElement && progressBarElement) {
+      console.log('Animating counter');
+      
+      animate(0, 100, {
+        duration: 2,
+        ease: "circOut",
+        onUpdate: (latest) => {
+          counterElement.innerHTML = Math.round(latest).toString();
+          progressBarElement.style.width = `${Math.round(latest)}%`;
+        },
+        onComplete: () => {
+          slideColumnsAndRemove();
+        }
+      });
+    }
+
+    function slideColumnsAndRemove() {
+      const column1 = document.getElementById('column-1');
+      const column2 = document.getElementById('column-2');
+      const column3 = document.getElementById('column-3');
+      const column4 = document.getElementById('column-4');
+      const column5 = document.getElementById('column-5');
+      
+      if (!column1 || !column2 || !column3 || !column4 || !column5 || !loadingScreenElement) return;
+
+      // Animar columnas con diferentes delays y duraciones
+      const animations = [
+        // Columna izquierda - sale primero y más rápido
+        animate(
+          column1,
+          { y: "-225vh" },
+          { duration: 0.7, delay: 0 }
+        ),
+        // Columna del medio - sale después con duración media
+        animate(
+          column2,
+          { y: "-225vh" },
+          { duration: 0.7, delay: 0.05 }
+        ),
+        // Columna derecha - sale al final y más lento
+        animate(
+          column3,
+          { y: "-225vh" },
+          { duration: 0.7, delay: 0.1 }
+        ),
+        animate(
+          column4,
+          { y: "-225vh" },
+          { duration: 0.7, delay: 0.15 }
+        ),
+        animate(
+          column5,
+          { y: "-225vh" },
+          { duration: 0.7, delay: 0.2 }
+        ) 
+      ];
+
+      // Esperar a que todas las animaciones terminen
+      Promise.all(animations.map(anim => anim.finished)).then(() => {
+        if (loadingScreenElement) {
+          loadingScreenElement.remove();
+        }
+        window.dispatchEvent(new CustomEvent('loadingComplete'));
+      });
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoadingScreen);
+  } else {
+    initLoadingScreen();
+  }
+</script>
+
+<style>
+  .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    color: white;
+    overflow: hidden;
+  }
+
+  .loading-columns {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .loading-column {
+    flex: 1;
+    height: 100%;
+  }
+
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  #count {
+    font-size: 3rem;
+    font-weight: 300;
+    margin: 0 0 2rem 0;
+    color: white;
+    font-family: monospace;
+  }
+
+  .loading-bar {
+    width: 100%;
+    max-width: 240px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.1s ease-out;
+  }
+
+  @media (max-width: 768px) {
+    #count {
+      font-size: 3rem;
+    }
+    
+    .loading-content {
+      padding: 0 1rem;
+    }
+    
+    .loading-bar {
+      max-width: 240px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #count {
+      font-size: 2.5rem;
+    }
+    
+    .loading-bar {
+      max-width: 200px;
+    }
+  }
+</style>
