@@ -3,14 +3,19 @@ import MainLayout from '../layout/MainLayout.astro';
 ---
 
 <MainLayout>
-  <section class="flex flex-col lg:flex-row items-center justify-between min-h-screen lg:pb-24 magicpattern">
-    <div class="lg:ml-64">
-      <h2 class="text-5xl my-4 text-indigo-200">Welcome</h2>
-      <h1 class="text-7xl my-4">I'm Jorge Albarracín</h1>
-      <h2 class="text-5xl my-4">Fullstack Developer_</h2>
+  <section class="flex flex-col min-h-screen items-center lg:pb-24 magicpattern">
+    <div class="flex lg:flex-row items-center gap-24 lg:mt-64">
+      <div class="">
+        <h2 class="text-5xl my-4 text-indigo-400">Welcome</h2>
+        <h1 class="text-7xl my-4">I'm Jorge Albarracín</h1>
+        <h2 class="text-5xl my-4">Fullstack Developer_</h2>
+      </div>
+      <div class="">
+        <img class="scale-50 lg:scale-75 ring-indigo-700 ring-4 transition-all hover:rotate-[5deg] hover:ring-8" src="https://avatars.githubusercontent.com/u/78957607?v=4" alt="avatar">
+      </div>
     </div>
-    <div class="lg:mr-64">
-      <img class="scale-50 lg:scale-75 ring-indigo-700 ring-8 hover:mask-clip-border" src="https://avatars.githubusercontent.com/u/78957607?v=4" alt="avatar">
+    <div class="animate-bounce mt-32">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" color="#7c86ff" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mouse-icon lucide-mouse"><rect x="5" y="2" width="14" height="20" rx="7"/><path d="M12 6v4"/></svg>
     </div>
   </section>
   <div class="bg-zinc-900 h-[100dvh] w-full flex">
