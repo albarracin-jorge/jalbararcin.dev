@@ -3,7 +3,7 @@ import MainLayout from '../layout/MainLayout.astro';
 ---
 
 <MainLayout>
-  <section class="flex flex-col min-h-screen items-center lg:pb-24 magicpattern">
+  <section id="welcome" class="flex flex-col h-screen items-center mb-24 magicpattern snap-center">
     <div class="flex lg:flex-row items-center gap-24 lg:mt-64">
       <div class="">
         <h2 class="text-5xl my-4 text-indigo-400">Welcome</h2>
@@ -19,24 +19,114 @@ import MainLayout from '../layout/MainLayout.astro';
     </div>
   </section>
   <div class="bg-zinc-900 h-[100dvh] w-full flex">
-    <div id="interval-1" class="bg-indigo-300 w-1/3"></div>
-    <div id="interval-2" class="bg-indigo-500 w-1/3"></div>
-    <div id="interval-3" class="bg-indigo-700 w-1/3"></div>
+    <div id="interval-1" class="bg-indigo-200 w-1/3 relative z-10"></div>
+    <div id="interval-2" class="bg-indigo-500 w-1/3 relative top-48 z-10"></div>
+    <div id="interval-3" class="bg-indigo-800 w-1/3 relative top-96 z-10"></div>
   </div>
-  <section class="h-[100dvh] flex items-center justify-center">
+  <section id="about" class="h-screen mt-[-100vh] bg-zinc-950 relative z-0 flex items-center justify-center snap-center">
     <p>about me</p>
   </section>
 </MainLayout>
 
 <script>
-  import { scroll } from 'motion';
+  import { scroll, animate } from 'motion';
 
   const interval1 = document.getElementById('interval-1');
   const interval2 = document.getElementById('interval-2');
   const interval3 = document.getElementById('interval-3');
+  const mouseScroll = document.getElementsByClassName('animate-bounce')[0] as HTMLElement;
+  const aboutSection = document.getElementById('about');
+  const welcomeSection = document.getElementById('welcome');
+  let lastScrollProgress = 0;
+  let isSnapping = false;
+  let currentSection = 0;
+  const snapThreshold = 0.10;
 
-  console.log(interval1);
-  scroll((progress, info) => console.log(info))
+  scroll((progress: number) => {
+    const smoothProgress = progress * 0.9 + lastScrollProgress * 0.1;
+    lastScrollProgress = smoothProgress;
+    
+    animate(mouseScroll, { 
+      opacity: Math.max(0, 1 - smoothProgress * 2) 
+    }, { 
+      duration: 0.3, 
+      ease: 'easeOut'
+    });
+
+    const baseTranslate = -120 * smoothProgress;
+    
+    animate(interval1!, { 
+      transform: `translateY(${baseTranslate}%)`,
+      top: 0
+    }, { 
+      duration: 0.3, 
+      ease: 'easeOut',
+    });
+    
+    animate(interval2!, { 
+      transform: `translateY(${baseTranslate}%)`,
+      top: 0
+    }, { 
+      duration: 0.5, 
+      ease: 'easeOut'
+    });
+    
+    animate(interval3!, { 
+      transform: `translateY(${baseTranslate}%)`,
+      top: 0
+    }, { 
+      duration: 0.7, 
+      ease: 'easeOut'
+    });
+
+
+    // // Handle section transitions more smoothly
+    // if (smoothProgress > 0.99 && !isTransitioning) {
+    //   isTransitioning = true;
+    //   // Gentle transition to about section
+    //   setTimeout(() => {
+    //     aboutSection?.scrollIntoView({ 
+    //       behavior: 'smooth',
+    //       block: 'start'
+    //     });
+    //     setTimeout(() => {
+    //       isTransitioning = false;
+    //     }, 800);
+    //   }, 200);
+    // }
+
+    // // Handle returning to welcome section
+    // if (smoothProgress < 0.001 && !isTransitioning && window.scrollY > 0) {
+    //   isTransitioning = true;
+    //   setTimeout(() => {
+    //     welcomeSection?.scrollIntoView({ 
+    //       behavior: 'smooth',
+    //       block: 'start'
+    //     });
+    //     setTimeout(() => {
+    //       isTransitioning = false;
+    //     }, 800);
+    //   }, 200);
+    // }
+  });
+
+  // let ticking = false;
+  // window.addEventListener('scroll', () => {
+  //   if (!ticking) {
+  //     requestAnimationFrame(() => {
+  //       const scrollTop = window.scrollY;
+  //       const windowHeight = window.innerHeight;
+  //       const progress = Math.min(scrollTop / windowHeight, 1);
+        
+  //       // Apply scroll progress with smooth easing
+  //       if (!isTransitioning) {
+  //         lastScrollProgress = progress;
+  //       }
+  //       ticking = false;
+  //     });
+  //     ticking = true;
+  //   }
+  // });
 </script>
 
 <style>
