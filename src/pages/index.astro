@@ -1,31 +1,17 @@
 ---
 import MainLayout from '../layout/MainLayout.astro';
+import Welcome from '../components/Welcome.astro';
+import About from '../components/About.astro';
 ---
 
 <MainLayout>
-  <section id="welcome" class="flex flex-col h-screen items-center mb-24 magicpattern snap-center">
-    <div class="flex lg:flex-row items-center gap-24 lg:mt-64">
-      <div class="">
-        <h2 class="text-5xl my-4 text-indigo-400">Welcome</h2>
-        <h1 class="text-7xl my-4">I'm Jorge Albarracín</h1>
-        <h2 class="text-5xl my-4">Fullstack Developer_</h2>
-      </div>
-      <div class="">
-        <img class="scale-50 lg:scale-75 ring-indigo-700 ring-4 transition-all hover:rotate-[5deg] hover:ring-8" src="https://avatars.githubusercontent.com/u/78957607?v=4" alt="avatar">
-      </div>
-    </div>
-    <div class="animate-bounce mt-32">
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" color="#7c86ff" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mouse-icon lucide-mouse"><rect x="5" y="2" width="14" height="20" rx="7"/><path d="M12 6v4"/></svg>
-    </div>
-  </section>
+  <Welcome />
   <div class="bg-zinc-900 h-[100dvh] w-full flex">
     <div id="interval-1" class="bg-indigo-200 w-1/3 relative z-10"></div>
-    <div id="interval-2" class="bg-indigo-500 w-1/3 relative top-48 z-10"></div>
-    <div id="interval-3" class="bg-indigo-800 w-1/3 relative top-96 z-10"></div>
+    <div id="interval-2" class="bg-indigo-500 w-1/3 relative lg:top-48 z-10"></div>
+    <div id="interval-3" class="bg-indigo-800 w-1/3 relative lg:top-96 z-10"></div>
   </div>
-  <section id="about" class="h-screen mt-[-100vh] bg-zinc-950 relative z-0 flex items-center justify-center snap-center">
-    <p>about me</p>
-  </section>
+  <About />
 </MainLayout>
 
 <script>
@@ -78,55 +64,7 @@ import MainLayout from '../layout/MainLayout.astro';
       duration: 0.7, 
       ease: 'easeOut'
     });
-
-
-    // // Handle section transitions more smoothly
-    // if (smoothProgress > 0.99 && !isTransitioning) {
-    //   isTransitioning = true;
-    //   // Gentle transition to about section
-    //   setTimeout(() => {
-    //     aboutSection?.scrollIntoView({ 
-    //       behavior: 'smooth',
-    //       block: 'start'
-    //     });
-    //     setTimeout(() => {
-    //       isTransitioning = false;
-    //     }, 800);
-    //   }, 200);
-    // }
-
-    // // Handle returning to welcome section
-    // if (smoothProgress < 0.001 && !isTransitioning && window.scrollY > 0) {
-    //   isTransitioning = true;
-    //   setTimeout(() => {
-    //     welcomeSection?.scrollIntoView({ 
-    //       behavior: 'smooth',
-    //       block: 'start'
-    //     });
-    //     setTimeout(() => {
-    //       isTransitioning = false;
-    //     }, 800);
-    //   }, 200);
-    // }
   });
-
-  // let ticking = false;
-  // window.addEventListener('scroll', () => {
-  //   if (!ticking) {
-  //     requestAnimationFrame(() => {
-  //       const scrollTop = window.scrollY;
-  //       const windowHeight = window.innerHeight;
-  //       const progress = Math.min(scrollTop / windowHeight, 1);
-        
-  //       // Apply scroll progress with smooth easing
-  //       if (!isTransitioning) {
-  //         lastScrollProgress = progress;
-  //       }
-  //       ticking = false;
-  //     });
-  //     ticking = true;
-  //   }
-  // });
 </script>
 
 <style>
