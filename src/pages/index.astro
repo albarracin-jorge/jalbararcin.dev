@@ -2,107 +2,16 @@
 import MainLayout from '../layout/MainLayout.astro';
 import Welcome from '../components/Welcome.astro';
 import About from '../components/About.astro';
+import Stack from '../components/Stack.astro';
+import Projects from '../components/Projects.astro';
 ---
 
 <MainLayout>
   <Welcome />
-
-  <!-- Welcome → About: Multi-slider vertical reveal (8 columns) -->
-  <div id="transition-welcome" class="transition-sliders h-[100dvh] w-full flex relative z-10 overflow-hidden">
-    <div class="slider-col" data-slider="0" style="--col-hue: 230; --col-light: 82%;"></div>
-    <div class="slider-col" data-slider="1" style="--col-hue: 232; --col-light: 74%;"></div>
-    <div class="slider-col" data-slider="2" style="--col-hue: 234; --col-light: 66%;"></div>
-    <div class="slider-col" data-slider="3" style="--col-hue: 236; --col-light: 58%;"></div>
-    <div class="slider-col" data-slider="4" style="--col-hue: 238; --col-light: 50%;"></div>
-    <div class="slider-col" data-slider="5" style="--col-hue: 240; --col-light: 42%;"></div>
-    <div class="slider-col" data-slider="6" style="--col-hue: 242; --col-light: 34%;"></div>
-    <div class="slider-col" data-slider="7" style="--col-hue: 244; --col-light: 26%;"></div>
-  </div>
-
   <About />
-
-  <!-- About → Projects: Horizontal blinds transition (8 rows) -->
-  <div id="transition-about" class="transition-blinds h-[100dvh] w-full flex flex-col relative z-10 overflow-hidden">
-    <div class="blind-row" data-blind="0" style="--blind-hue: 260; --blind-light: 78%;"></div>
-    <div class="blind-row" data-blind="1" style="--blind-hue: 265; --blind-light: 70%;"></div>
-    <div class="blind-row" data-blind="2" style="--blind-hue: 270; --blind-light: 62%;"></div>
-    <div class="blind-row" data-blind="3" style="--blind-hue: 275; --blind-light: 54%;"></div>
-    <div class="blind-row" data-blind="4" style="--blind-hue: 280; --blind-light: 46%;"></div>
-    <div class="blind-row" data-blind="5" style="--blind-hue: 285; --blind-light: 38%;"></div>
-    <div class="blind-row" data-blind="6" style="--blind-hue: 290; --blind-light: 30%;"></div>
-    <div class="blind-row" data-blind="7" style="--blind-hue: 295; --blind-light: 22%;"></div>
-  </div>
-
-  <!-- Projects placeholder section -->
-  <section id="projects" class="h-screen mt-[-100vh] bg-zinc-950 relative z-0 flex items-center justify-center snap-center">
-    <p>projects</p>
-  </section>
+  <Stack />
+  <Projects />
 </MainLayout>
-
-<script>
-  import { scroll, animate } from 'motion';
-
-  // === Welcome → About: multi-slider vertical reveal ===
-  const SLIDER_COUNT = 8;
-  const sliders = Array.from({ length: SLIDER_COUNT }, (_, i) =>
-    document.querySelector(`[data-slider="${i}"]`) as HTMLElement
-  );
-  const mouseScroll = document.getElementsByClassName('animate-bounce')[0] as HTMLElement;
-
-  // Staggered initial top offsets (wave pattern from edges to center)
-  const staggerOffsets = [0, 6, 12, 18, 20, 14, 8, 2]; // vh units
-  // Duration multipliers for each column (creates cascading speed)
-  const durationMap = [0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60];
-
-  scroll((progress: number) => {
-    // Fade bounce indicator
-    animate(mouseScroll, {
-      opacity: Math.max(0, 1 - progress * 3)
-    }, { duration: 0.2, ease: 'easeOut' });
-
-    const baseTranslate = -120 * progress;
-
-    sliders.forEach((slider, i) => {
-      if (!slider) return;
-      animate(slider, {
-        transform: `translateY(${baseTranslate}%)`,
-        top: '0px'
-      }, {
-        duration: durationMap[i],
-        ease: 'easeOut'
-      });
-    });
-  }, {
-    target: document.getElementById('transition-welcome')!
-  });
-
-  // === About → Projects: horizontal blinds reveal ===
-  const BLIND_COUNT = 8;
-  const blinds = Array.from({ length: BLIND_COUNT }, (_, i) =>
-    document.querySelector(`[data-blind="${i}"]`) as HTMLElement
-  );
-
-  // Alternating left/right slide direction
-  const blindDirections = [1, -1, 1, -1, 1, -1, 1, -1]; // 1=right, -1=left
-  const blindDurations = [0.20, 0.28, 0.36, 0.44, 0.48, 0.40, 0.32, 0.24];
-
-  scroll((progress: number) => {
-    const baseTranslate = 120 * progress;
-
-    blinds.forEach((blind, i) => {
-      if (!blind) return;
-      const direction = blindDirections[i];
-      animate(blind, {
-        transform: `translateX(${direction * baseTranslate}%)`
-      }, {
-        duration: blindDurations[i],
-        ease: 'easeOut'
-      });
-    });
-  }, {
-    target: document.getElementById('transition-about')!
-  });
-</script>
 
 <style>
   /* Welcome → About: vertical slider columns */
