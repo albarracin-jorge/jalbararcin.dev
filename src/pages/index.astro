@@ -1,28 +1,44 @@
 ---
-import MainLayout from "../layout/MainLayout.astro";
-import Hero from "../components/Home/Hero.astro";
-import ListExperience from "../components/Home/ListExperience.astro";
-import Contact from "../components/Home/Contact.astro"
+import MainLayout from '../layout/MainLayout.astro';
+import Welcome from '../components/Welcome.astro';
+import About from '../components/About.astro';
+import Stack from '../components/Stack.astro';
+import Projects from '../components/Projects.astro';
 ---
 
 <MainLayout>
-	<Hero>
-		<!-- Hi, i am Jorge, software developer for almost 4 years, i consider a t shaped full stack developer with orientation in frontend skills. 
-		In my carreer i worked whit api integrations, designed data base structures, managed headless cms and even develop websocket services. 
-		I working on a small startup improovment their B2B products, whit SAP integrations and in my free time help people develop their little business doing freelance services. 
-		My professional goal is improve the life of the people whit better apps who solve the day to day or improve existing process. -->
-		<p>
-			Hi, I am Jorge, software developer for almost 4 years, I consider a T-shaped full stack developer with a focus on frontend skills.
-		</p>
-		<p class="mt-8">
-			In my career I've worked with api integrations, designed data base structures, managed headless cms and even developed websocket services. 
-			I'm working on a small startup improvment their B2B products, 
-			with SAP integrations and in my free time help small businesses grow doing freelance services.
-		</p>
-		<p class="mt-8">
-			My professional goal is improve the life of the people whit better apps who solve the day to day issues or improve existing process.
-		</p>
-	</Hero>
-	<ListExperience/>
-	<Contact />
+  <Welcome />
+  <About />
+  <Stack />
+  <Projects />
 </MainLayout>
+
+<style>
+  /* Welcome → About: vertical slider columns */
+  .slider-col {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+    background-color: hsl(var(--col-hue) 60% var(--col-light));
+  }
+
+  /* Staggered initial offsets for wave effect */
+  .slider-col[data-slider="0"] { top: 0vh; }
+  .slider-col[data-slider="1"] { top: 6vh; }
+  .slider-col[data-slider="2"] { top: 12vh; }
+  .slider-col[data-slider="3"] { top: 18vh; }
+  .slider-col[data-slider="4"] { top: 20vh; }
+  .slider-col[data-slider="5"] { top: 14vh; }
+  .slider-col[data-slider="6"] { top: 8vh; }
+  .slider-col[data-slider="7"] { top: 2vh; }
+
+  /* About → Projects: horizontal blind rows */
+  .blind-row {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    background-color: hsl(var(--blind-hue) 50% var(--blind-light));
+  }
+</style>
