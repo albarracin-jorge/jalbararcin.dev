@@ -4,12 +4,15 @@ const currentDate = new Date();
 const yearsExperience = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
 ---
 
-<section class="h-screen bg-linear-to-t from-neutral-900 to-black relative z-0 flex justify-center snap-center font-mono">
+<section class="h-screen bg-black z-0 flex justify-center snap-center font-mono">
   <div class="w-1/2 bg-indigo-500 hidden md:block">
     <img src="" alt="">
   </div>
-  <div class="md:w-1/2 flex items-center">
-    <p class="italic text-lg px-8 md:text-2xl md:px-12">I started studying software development in 2018, bringing {yearsExperience}+ years of experience as a developer across various domains. I'm someone constantly seeking to improve and push beyond my current capabilities. I'm not afraid to experiment and try new things. I stay informed about industry trends and embrace innovation without hesitation.
+  <div class="md:w-1/2 flex flex-col items-center justify-center gap-8 md:gap-24 md:px-18">
+    <p class="italic text-lg px-8 md:text-xl">I started studying software development in 2018, bringing {yearsExperience}+ years of experience as a developer across various domains. I'm someone constantly seeking to improve and push beyond my current capabilities. I'm not afraid to experiment and try new things. I stay informed about industry trends and embrace innovation without hesitation.
+      <span id="about" class="inline-block text-indigo-400 select-none align-baseline">_</span>
+    </p>
+      <p class="italic text-lg px-8 md:text-xl">I'm currently a Software Developer at Accenture in the Financial Services sector, collaborating closely with data science teams, business analysts, and architects to build scalable cloud-native solutions. I focus on designing robust infrastructure and implementing high-performance applications that meet complex financial requirements. I also take on freelance projects selectively, allowing me to explore emerging technologies and maintain a diverse range of technical challenges.
       <span id="about" class="inline-block text-indigo-400 select-none align-baseline">_</span>
     </p>
   </div>
