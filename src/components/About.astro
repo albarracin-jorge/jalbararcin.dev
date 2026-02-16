@@ -1,0 +1,39 @@
+---
+const startDate = new Date(2021, 8, 1); // September 2021
+const currentDate = new Date();
+const yearsExperience = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+---
+
+<section class="h-screen bg-black z-0 flex justify-center snap-center font-mono">
+  <div class="w-1/2 bg-indigo-500 hidden md:block">
+    <img src="" alt="">
+  </div>
+  <div class="md:w-1/2 flex flex-col items-center justify-center gap-8 md:gap-24 md:px-24">
+    <p class="italic text-lg md:text-xl">I started studying software development in 2018, bringing {yearsExperience}+ years of experience as a developer across various domains. I'm someone constantly seeking to improve and push beyond my current capabilities. I'm not afraid to experiment and try new things. I stay informed about industry trends and embrace innovation without hesitation.
+      <span id="about1" class="inline-block text-indigo-400 select-none align-baseline">_</span>
+    </p>
+      <p class="italic text-lg md:text-xl">I'm currently a Software Developer at Accenture in the Financial Services sector, collaborating closely with data science teams, business analysts, and architects to build scalable cloud-native solutions. I focus on designing robust infrastructure and implementing high-performance applications that meet complex financial requirements. I also take on freelance projects selectively, allowing me to explore emerging technologies and maintain a diverse range of technical challenges.
+      <span id="about2" class="inline-block text-indigo-400 select-none align-baseline">_</span>
+    </p>
+  </div>
+</section>
+
+<script>
+  import { animate } from "motion";
+
+  const cursor1 = document.getElementById('about1') as HTMLElement | null;
+  const cursor2 = document.getElementById('about2') as HTMLElement | null;
+
+  // Blink the underscore cursor forever using a small loop
+  if (cursor1 && cursor2) {
+    (async function blink() {
+      while (true) {
+        await (animate(cursor1, { opacity: 0.2 }, { duration: 0.6, ease: 'easeInOut' }) as any).finished;
+        await (animate(cursor1, { opacity: 1 }, { duration: 0.6, ease: 'easeInOut' }) as any).finished;
+        await (animate(cursor2, { opacity: 0.2 }, { duration: 0.6, ease: 'easeInOut' }) as any).finished;
+        await (animate(cursor2, { opacity: 1 }, { duration: 0.6, ease: 'easeInOut' }) as any).finished;
+      }
+    })();
+  }
+</script>
+

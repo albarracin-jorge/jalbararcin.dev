@@ -1,8 +1,4 @@
 ---
-import SocialMedia from "../components/Layout/SocialMedia.astro";
-import linkedInLogo from "../assets/linkedin.svg";
-import gitHubLogo from "../assets/github.svg";
-
 const linkedin = "https://www.linkedin.com/in/jorge-albarracin/";
 const github = "https://github.com/albarracin-jorge";
 ---
@@ -35,43 +31,9 @@ const github = "https://github.com/albarracin-jorge";
 		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
 		<title>JAlbarracin | Full Stack Developer</title>
 	</head>
-	<body class="magicpattern dark:bg-slate-950 dark:text-slate-100 flex flex-col min-h-screen">
-		<header
-			class="h-[7vh] xl:h-20 shadow-header dark:shadow-dark-header bg-slate-200 dark:bg-slate-950 relative z-10"
-		>
-			<div
-				class="mx-auto md:w-[60vw] md:mx-[20vw] pt-3 lg:pt-4 flex justify-around items-center"
-			>
-				<div class="flex items-center gap-4">
-					<a
-						href="/"
-						class="dark:text-slate-100 text-2xl md:text-4xl hover:border-b-[1px] hover:mb-[-1px] hover:border-zinc-900 dark:hover:border-slate-100"
-						>albarracin.dev</a
-					>
-					<div>
-						<a
-							class="hover:border-b-[1px] hover:border-zinc-900 dark:hover:border-slate-100 md:mx-1 text-sm md:text-base"
-							href="/projects">Projects</a
-						>
-						<a
-							class="hover:border-b-[1px] hover:border-zinc-900 dark:hover:border-slate-100 md:mx-1 text-sm md:text-base"
-							href="/resources">Resources</a
-						>
-					</div>
-				</div>
-				<SocialMedia
-					linkedin={linkedin}
-					github={github}
-					linkedInLogo={linkedInLogo}
-					gitHubLogo={gitHubLogo}
-				/>
-			</div>
-		</header>
-		<main class="flex flex- min-h-full">
-			<div class="w-[100vw]">
-				<slot />
-			</div>
-		</main>
+	<body class="dark:bg-zinc-950 dark:text-slate-100 flex flex-col">
+		<!-- <LoadingScreen /> -->
+		<slot />
 	</body>
 </html>
 
