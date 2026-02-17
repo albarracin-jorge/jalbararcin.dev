@@ -1,3 +1,84 @@
-<section class="h-screen bg-linear-to-t from-neutral-900 to-neutral-950 relative z-0 flex items-center justify-center snap-center">
-  <p>another about me</p>
+---
+import previewAkerControl from '../assets/preview-akercontrol.jpg';
+import previewDMakers from '../assets/preview-dmakers.jpg';
+import previewWarcraft from '../assets/preview-warcraft-chat.jpg';
+
+const projects = [
+  {
+    name: 'AKER',
+    description: 'Corporate landing page focused on performance, brand clarity, and commercial messaging.',
+    image: previewAkerControl,
+    tags: ['Svelte', 'Branding'],
+  },
+  {
+    name: 'DMAKERS.IO',
+    description: 'Client acquisition website with a bold visual style and high-contrast layout.',
+    image: previewDMakers,
+    tags: ['Svelte', 'Generative AI', 'Marketing'],
+  },
+  {
+    name: 'Warcraft Chat',
+    description: 'Creative playground to explore themed interfaces and conversational interactions.',
+    image: previewWarcraft,
+    tags: ['Next.js', 'TypeScript', 'AI'],
+  },
+];
+---
+
+<section class="h-screen bg-black relative z-0 flex items-center justify-center snap-center font-mono overflow-hidden px-4 md:px-10">
+  <div class="w-full max-w-7xl">
+    <div class="mb-6 md:mb-10">
+      <p class="text-indigo-400 text-xl md:text-2xl italic">Projects<span id="projects-cursor" class="inline-block select-none">_</span></p>
+      <p class="italic text-lg md:text-xl max-w-3xl text-slate-200/90">
+        A selection of projects where I combined visual design, web architecture, and user experience focus.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 h-[68vh]">
+      {
+        projects.map((project, index) => (
+          <article class:list={["group relative overflow-hidden border border-white/10", index === 0 && 'md:col-span-2']}>
+            <img
+              src={project.image.src}
+              alt={`Preview de ${project.name}`}
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+
+            <div class="absolute inset-0 bg-black/55 group-hover:bg-black/45 transition-colors duration-300" />
+
+            <div class="absolute inset-x-0 bottom-0 p-4 md:p-6 flex flex-col gap-2 md:gap-3">
+              <h3 class="text-2xl md:text-4xl font-bold tracking-tight text-white">{project.name}</h3>
+              <p class="text-sm md:text-base text-slate-200/95 max-w-3xl">{project.description}</p>
+
+              <div class="flex flex-wrap gap-2 pt-1">
+                {
+                  project.tags.map((tag) => (
+                    <span class="text-xs md:text-sm px-2 py-1 border border-indigo-950 text-indigo-950 bg-indigo-500">
+                      {tag}
+                    </span>
+                  ))
+                }
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
 </section>
+
+<script>
+  import { animate } from 'motion';
+
+  const cursor = document.getElementById('projects-cursor') as HTMLElement | null;
+
+  if (cursor) {
+    (async function blink() {
+      while (true) {
+        await (animate(cursor, { opacity: 0.2 }, { duration: 0.6, ease: 'easeInOut' }) as any).finished;
+        await (animate(cursor, { opacity: 1 }, { duration: 0.6, ease: 'easeInOut' }) as any).finished;
+      }
+    })();
+  }
+</script>
