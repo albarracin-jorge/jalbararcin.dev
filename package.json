@@ -20,5 +20,8 @@
   },
   "devDependencies": {
     "@types/gsap": "^1.20.2"
+  },
+  "overrides": {
+    "lodash": ">=4.17.22"
   }
 }
