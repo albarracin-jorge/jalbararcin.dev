@@ -1,0 +1,16 @@
+# Railway / nixpacks build config.
+# Node comes from nix; pnpm is provided via corepack so the exact version
+# pinned in package.json ("packageManager") is used, instead of letting
+# nixpacks try to resolve pnpm 11 from an older pinned nixpkgs snapshot.
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+[phases.install]
+cmds = [
+  "corepack enable",
+  "corepack prepare pnpm@11.20.0 --activate",
+  "pnpm install --frozen-lockfile",
+]
+
+[phases.build]
+cmds = ["pnpm run build"]
