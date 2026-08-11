@@ -1,14 +1,14 @@
 # Railway / nixpacks build config.
-# Node comes from nix; pnpm is provided via corepack so the exact version
-# pinned in package.json ("packageManager") is used, instead of letting
-# nixpacks try to resolve pnpm 11 from an older pinned nixpkgs snapshot.
+# Node comes from nix; pnpm is installed globally with npm (pinned to the same
+# version as package.json's "packageManager"). We avoid corepack because the
+# corepack bundled with the image's Node has outdated signing keys and fails to
+# verify recent pnpm releases ("Cannot find matching keyid").
 [phases.setup]
 nixPkgs = ["nodejs_22"]
 
 [phases.install]
 cmds = [
-  "corepack enable",
-  "corepack prepare pnpm@11.20.0 --activate",
+  "npm install -g pnpm@11.20.0",
   "pnpm install --frozen-lockfile",
 ]
 
