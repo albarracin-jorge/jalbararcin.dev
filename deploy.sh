@@ -5,7 +5,9 @@ docker container rm jalbarracin
 
 git pull origin main && \
 
-npm run build && \
+pnpm install --frozen-lockfile && \
+
+pnpm run build && \
 
 docker image rm nginx-jalbarracin && \
 

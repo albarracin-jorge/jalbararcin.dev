@@ -4,9 +4,9 @@ Made with Astro + TailwindCSS 🚀👨🏻‍🚀
 
 ## Steps to deploy this website:
 
-Install dependencies and generate astro build
+Install dependencies and generate astro build (this project uses **pnpm**)
 ```
-npm i && npm run build
+pnpm install && pnpm run build
 ```
 
 Build local image of the Dockerfile
