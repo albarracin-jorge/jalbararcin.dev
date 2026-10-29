@@ -11,8 +11,8 @@ import { defaultLocale, locales } from '../i18n';
     <title>Jorge Albarracín</title>
     {locales.map((l) => <link rel="alternate" hreflang={l} href={`https://albarracin.dev/${l}/`} />)}
     <script is:inline>
-      // Spanish for any Spanish browser, English otherwise.
-      var lang = (navigator.language || 'es').slice(0, 2) === 'es' ? 'es' : 'en';
+      // Spanish only for Spanish browsers, English otherwise.
+      var lang = (navigator.language || 'en').slice(0, 2) === 'es' ? 'es' : 'en';
       location.replace('/' + lang + '/' + location.search + location.hash);
     </script>
   </head>

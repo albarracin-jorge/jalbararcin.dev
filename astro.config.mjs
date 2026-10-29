@@ -7,7 +7,7 @@ export default defineConfig({
 
   // Both locales are prerendered under /es/ and /en/; `/` picks one on the client.
   i18n: {
-    defaultLocale: 'es',
+    defaultLocale: 'en',
     locales: ['es', 'en'],
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
