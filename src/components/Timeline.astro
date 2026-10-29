@@ -1,0 +1,290 @@
+---
+import {
+  milestones,
+  parallelRole,
+  branchIndex,
+  alongside,
+  formatPeriod,
+  formatRange,
+  formatWhen,
+  yearOf,
+} from '../data/career';
+import { ui, type Locale } from '../i18n';
+
+const { lang } = Astro.props as { lang: Locale };
+const t = ui[lang];
+
+const listFormat = new Intl.ListFormat(lang, { type: 'conjunction' });
+const alongsideParts = listFormat.formatToParts(alongside);
+---
+
+<section class="timeline-wrap">
+  <h2 class="section-h">{t.timelineTitle}</h2>
+  <p class="section-sub">{t.timelineSub}</p>
+
+  <div class="timeline" id="timeline">
+    <div class="rail"><div class="rail-fill" id="rail-fill"></div></div>
+    <div class="par-rail" id="par-rail" aria-hidden="true"></div>
+
+    {
+      milestones.map((m, i) => (
+        <>
+          {i === branchIndex && (
+            <div class="item branch" id="branch">
+              <div class="year">{parallelRole.start[0]}</div>
+              <div class="node" />
+              <button class="branch-note" type="button" data-open-peek>
+                <span class="mono">{formatWhen(parallelRole.start, lang)}</span> {t.parallelNote(parallelRole.company)} <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          )}
+          {m.kind === 'education' ? (
+            <div class="item edu">
+              <div class="year">{yearOf(m.start)}</div>
+              <div class="node" />
+              <p class="edu-line">
+                <span class="mono">{t.education}</span> {m.company} · {m.subtitle[lang]}
+              </p>
+            </div>
+          ) : (
+          <div class:list={['item', { current: !m.end }]}>
+            <div class="year">{yearOf(m.start)}</div>
+            <div class="node" />
+            <article class="card">
+              <span class="mono period">{formatPeriod(m.start, lang, m.end)}</span>
+              {!m.end && <span class="badge">{t.now}</span>}
+              <h3>
+                {m.company}
+                {m.companyNote && <span class="company-note">· {m.companyNote}</span>}
+              </h3>
+              <h4>{m.subtitle[lang]}</h4>
+              {m.description && <p>{m.description[lang]}</p>}
+              {m.points && (
+                <ul class="points">
+                  {m.points.map((p) => <li>{p[lang]}</li>)}
+                </ul>
+              )}
+              {m.subRoles && (
+                <div class="sub-roles">
+                  {m.subRoles.map((r) => (
+                    <div>
+                      <strong>{r.title[lang]}</strong>
+                      <span class="mono sub-period">{formatRange(r.start, lang, r.end)}</span>
+                      <p class="sub-summary">{r.summary[lang]}</p>
+                      {r.points && (
+                        <ul class="points">
+                          {r.points.map((p) => <li>{p[lang]}</li>)}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {m.chips && (
+                <div class="chips">
+                  {m.chips.map((c) => <span>{typeof c === 'string' ? c : c[lang]}</span>)}
+                </div>
+              )}
+            </article>
+          </div>
+          )}
+        </>
+      ))
+    }
+  </div>
+</section>
+
+<aside class="peek" id="peek" aria-label={`${t.parallel}: ${parallelRole.company}`}>
+  <div class="peek-inner">
+    <button class="peek-tab" id="peek-tab" type="button" aria-expanded="false" aria-controls="peek-body"><i></i><span>{t.parallel}</span></button>
+    <div class="peek-body" id="peek-body">
+      <div class="peek-head">
+        <div class="peek-logo">{parallelRole.company[0]}</div>
+        <div><h3>{parallelRole.company}</h3><h4>{parallelRole.title[lang]}</h4></div>
+      </div>
+      <span class="mono period" id="peek-period" data-start={parallelRole.start.join('-')}>{formatRange(parallelRole.start, lang)}</span>
+      <p>{parallelRole.description[lang]}</p>
+      <ul class="points">
+        {parallelRole.points.map((p) => <li>{p[lang]}</li>)}
+      </ul>
+      <p class="while">
+        {t.alongside} {alongsideParts.map((part) => (part.type === 'element' ? <b>{part.value}</b> : part.value))}.
+      </p>
+    </div>
+  </div>
+</aside>
+
+<script>
+  import { formatDuration } from '../data/career';
+  import type { Locale } from '../i18n';
+
+  const lang = document.documentElement.lang as Locale;
+  const progress = document.getElementById('progress');
+  const timeline = document.getElementById('timeline')!;
+  const fill = document.getElementById('rail-fill')!;
+  const parRail = document.getElementById('par-rail')!;
+  const firstNode = timeline.querySelector<HTMLElement>('.item .node')!;
+  const branchNode = document.querySelector<HTMLElement>('#branch .node')!;
+  const peek = document.getElementById('peek')!;
+  const peekTab = document.getElementById('peek-tab')!;
+  const peekPeriod = document.getElementById('peek-period')!;
+
+  // Parallel rail spans from the current node down to the branch node (minus the curve).
+  const centerY = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    return r.top + r.height / 2 - timeline.getBoundingClientRect().top;
+  };
+  const layoutParRail = () => {
+    const top = centerY(firstNode);
+    const bottom = centerY(branchNode) - 14;
+    parRail.style.top = `${top}px`;
+    parRail.style.height = `${Math.max(0, bottom - top)}px`;
+  };
+
+  const setOpen = (open: boolean) => {
+    peek.classList.toggle('open', open);
+    peekTab.setAttribute('aria-expanded', String(open));
+    parRail.classList.toggle('lit', open);
+  };
+
+  // The tab peeks in only while the viewport's middle is within the parallel period.
+  const updatePeek = () => {
+    const r = parRail.getBoundingClientRect();
+    const mid = innerHeight / 2;
+    const inRange = r.top < mid && r.bottom + 14 > mid;
+    peek.classList.toggle('show', inRange);
+    if (!inRange && peek.classList.contains('open')) setOpen(false);
+  };
+
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    if (progress) progress.style.transform = `scaleX(${scrollY / max})`;
+    const r = timeline.getBoundingClientRect();
+    const pct = Math.min(1, Math.max(0, (innerHeight * 0.6 - r.top) / r.height));
+    fill.style.height = `${pct * 100}%`;
+    updatePeek();
+  };
+
+  peekTab.addEventListener('click', () => setOpen(!peek.classList.contains('open')));
+  document.querySelector('[data-open-peek]')?.addEventListener('click', () => {
+    peek.classList.add('show');
+    setOpen(true);
+  });
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element;
+    if (!peek.contains(target) && !target.closest('[data-open-peek]')) setOpen(false);
+  });
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  // Ongoing duration is computed in the browser so it doesn't freeze at build time.
+  const [sy, sm] = (peekPeriod.dataset.start ?? '').split('-').map(Number);
+  const now = new Date();
+  peekPeriod.textContent += ` · ${formatDuration((now.getFullYear() - sy) * 12 + (now.getMonth() + 1 - sm) + 1, lang)}`;
+
+  layoutParRail();
+  addEventListener('resize', () => { layoutParRail(); onScroll(); });
+  document.fonts.ready.then(() => { layoutParRail(); onScroll(); });
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) e.target.closest('.item')?.classList.add('in');
+    }),
+    { rootMargin: '0px 0px -35% 0px' },
+  );
+  document.querySelectorAll('.item .card, .item .branch-note, .item .edu-line').forEach((el) => io.observe(el));
+</script>
+
+<style>
+  .timeline-wrap { padding: 80px var(--gutter) 40px; max-width: 1180px; margin: 0 auto; }
+  .timeline { position: relative; --main-x: 200px; --par-x: 216px; }
+  .rail { position: absolute; top: 0; bottom: 56px; left: calc(var(--main-x) - 1px); width: 2px; background: var(--line); }
+  .rail-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0; background: var(--indigo); }
+
+  .item { display: grid; grid-template-columns: 180px 40px 1fr; }
+  .year { grid-column: 1; text-align: right; padding: 4px 0 0; position: sticky; top: 90px; align-self: start; font-weight: 400; font-size: 36px; letter-spacing: -.03em; color: #2c2c4a; transition: color .5s; }
+  .item.in .year { color: var(--text); }
+  .node { grid-column: 2; justify-self: center; margin-top: 16px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line); z-index: 2; transition: .4s; position: relative; }
+  .item.in .node { border-color: var(--indigo); background: var(--indigo); }
+  .item.current .node::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid var(--indigo); opacity: .5; }
+
+  .card { grid-column: 3; margin: 0 0 56px 8px; padding: 24px 28px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; opacity: .25; transform: translateX(16px); transition: opacity .7s, transform .7s cubic-bezier(.2,.7,.2,1), border-color .3s; }
+  .item.in .card { opacity: 1; transform: none; }
+  .card:hover { border-color: #3a3a62; }
+  .card .period { color: var(--muted); }
+  .card h3 { font-size: clamp(20px, 2.2vw, 26px); letter-spacing: -.015em; margin: 8px 0 2px; }
+  .company-note { color: var(--muted); font-weight: 400; }
+  .card h4 { font-weight: 400; color: var(--muted); font-size: 15px; }
+  .card p { margin-top: 14px; line-height: 1.7; color: #c6c6e0; font-weight: 300; }
+  .points { margin-top: 12px; display: grid; gap: 8px; list-style: none; padding: 0; }
+  .points li { position: relative; padding-left: 16px; line-height: 1.6; font-size: 15px; color: #b4b4d0; font-weight: 300; }
+  .points li::before { content: ""; position: absolute; left: 0; top: .7em; width: 6px; height: 1px; background: var(--indigo); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .chips span { font-family: var(--mono); font-size: 12px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--line); color: var(--muted); }
+  .badge { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 6px; color: var(--indigo); border: 1px solid #818cf855; margin-left: 8px; vertical-align: middle; }
+  .sub-roles { margin-top: 20px; display: grid; gap: 22px; border-left: 1px solid var(--line); padding-left: 18px; }
+  .sub-roles strong { font-weight: 600; margin-right: 10px; }
+  .sub-period { color: var(--muted); font-size: 12px; }
+  .card .sub-summary { margin-top: 6px; font-size: 15px; }
+
+  .edu .year { font-size: 18px; padding-top: 6px; }
+  .edu .node { width: 8px; height: 8px; margin-top: 12px; }
+  .edu-line { grid-column: 3; margin: 0 0 20px 8px; padding-top: 4px; color: var(--muted); font-size: 14px; font-weight: 300; line-height: 1.5; opacity: .4; transition: opacity .7s; }
+  .edu.in .edu-line { opacity: 1; }
+  .edu-line .mono { color: var(--text); margin-right: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+
+  /* Parallel track: a dashed rail that branches off the main one and runs to today */
+  .par-rail { position: absolute; left: var(--par-x); top: 0; height: 0; border-left: 2px dashed currentColor; color: #f472b655; pointer-events: none; transition: color .5s; }
+  .par-rail::after { content: ""; position: absolute; bottom: -14px; left: calc(var(--main-x) - var(--par-x) - 2px); width: calc(var(--par-x) - var(--main-x) + 2px); height: 14px; border: 2px dashed currentColor; border-top: 0; border-left: 0; border-bottom-right-radius: 12px; }
+  .par-rail::before { content: ""; position: absolute; top: -4px; left: -5px; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .par-rail.lit { color: var(--pink); }
+
+  .branch .year { font-size: 24px; padding-top: 2px; }
+  .branch.in .year { color: #f472b6aa; }
+  .branch .node { width: 10px; height: 10px; margin-top: 14px; }
+  .branch.in .node { background: var(--bg); border-color: var(--pink); }
+  .branch-note { grid-column: 3; justify-self: start; margin: 6px 0 56px 8px; padding: 8px 14px; font: 300 15px var(--sans); color: var(--muted); background: none; border: 1px dashed #f472b644; border-radius: 8px; cursor: pointer; opacity: .25; transition: opacity .7s, color .3s, border-color .3s; text-align: left; }
+  .item.in .branch-note { opacity: 1; }
+  .branch-note .mono { color: var(--pink); font-size: 12px; margin-right: 6px; }
+  .branch-note:hover { color: var(--text); border-color: var(--pink); }
+
+  /* Peeking side tab: sits mostly off-screen while the parallel period is in view */
+  .peek { --ty: -50%; --peek: 84px; position: fixed; right: 0; top: 50%; z-index: 40; width: 340px; max-width: calc(100vw - 24px); display: flex; transform: translate(100%, var(--ty)); opacity: 0; pointer-events: none; transition: transform .7s cubic-bezier(.2,.7,.2,1), opacity .4s; }
+  .peek.show { transform: translate(calc(100% - var(--peek)), var(--ty)); opacity: 1; pointer-events: auto; }
+  .peek.show:not(.open):hover { transform: translate(calc(100% - var(--peek) - 28px), var(--ty)); }
+  .peek.show.open { transform: translate(0, var(--ty)); }
+  .peek-inner { display: flex; width: 100%; }
+  .peek-tab { flex: none; width: 34px; display: grid; place-items: center; gap: 8px; padding: 14px 0; background: #1a1422; border: 1px solid #f472b644; border-right: 0; border-radius: 8px 0 0 8px; color: var(--pink); cursor: pointer; font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+  .peek-tab span { writing-mode: vertical-rl; transform: rotate(180deg); }
+  .peek-tab i { width: 6px; height: 6px; border-radius: 50%; background: var(--pink); }
+  .peek-body { flex: 1; min-width: 0; padding: 18px 20px 20px; background: #130f1c; border: 1px solid #f472b633; border-left: 0; max-height: 80vh; overflow-y: auto; }
+  .peek-head { display: flex; align-items: center; gap: 12px; }
+  .peek-logo { flex: none; width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; font-weight: 600; color: var(--pink); border: 1px solid #f472b655; }
+  .peek-head h3 { font-size: 17px; letter-spacing: -.01em; }
+  .peek-head h4 { font-weight: 400; color: var(--muted); font-size: 13px; }
+  .peek-body .period { display: block; color: var(--pink); font-size: 12px; margin: 14px 0 6px; }
+  .peek-body p { color: #c6c6e0; font-weight: 300; font-size: 14px; line-height: 1.6; }
+  .peek-body .points li { font-size: 13.5px; }
+  .peek-body .points li::before { background: var(--pink); }
+  .peek-body .while { margin-top: 12px; font-size: 12.5px; color: var(--muted); border-top: 1px dashed #f472b633; padding-top: 10px; }
+  .peek-body .while b { color: var(--text); font-weight: 600; }
+  .peek-body > :not(.peek-head) { transition: opacity .4s; }
+  .peek:not(.open) .peek-body > :not(.peek-head) { opacity: .35; }
+
+  @media (max-width: 760px) {
+    .timeline { --main-x: 12px; --par-x: 25px; }
+    .item { grid-template-columns: 24px 1fr; }
+    .year { grid-column: 2; position: static; text-align: left; padding: 0 0 8px 12px; font-size: 28px; color: var(--text); }
+    .node { grid-column: 1; grid-row: 2; margin-top: 12px; width: 12px; height: 12px; }
+    .card { grid-column: 2; grid-row: 2; margin: 0 0 40px 16px; padding: 20px; transform: translateY(16px); }
+    .branch-note { grid-column: 2; grid-row: 2; margin: 6px 0 40px 16px; font-size: 14px; }
+    .branch .year { font-size: 22px; }
+    .edu .year { font-size: 16px; padding-bottom: 4px; }
+    .edu-line { grid-column: 2; grid-row: 2; margin: 0 0 24px 16px; }
+    .edu .node { margin-top: 8px; }
+    .peek { --ty: 0; --peek: 48px; top: auto; bottom: 20px; width: 300px; }
+  }
+</style>

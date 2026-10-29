@@ -1,47 +1,55 @@
 ---
-import LoadingScreen from "../components/LoadingScreen.astro";
 import "../styles/global.css";
+import { locales, ui, type Locale } from "../i18n";
+
+interface Props {
+	lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const origin = "https://albarracin.dev";
 ---
 
 <!doctype html>
-<html lang="en" class="dark snap-y snap-mandatory scroll-smooth">
+<html lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta
-			property="og:title"
-			content="JAlbarracín | Desarrollador Full Stack"
-		/>
+		<title>{t.htmlTitle}</title>
+		<meta name="description" content={t.description} />
+		<meta property="og:title" content={t.ogTitle} />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://albarracin.dev" />
-		<meta
-			property="og:description"
-			content="Bienvenido a mi sitio web, aquí encontraras información sobre mi carrerra profesional."
-		/>
-		<meta
-			property="og:image"
-			content="https://albarracin.dev/jalbarracin-website-social.png"
-		/>
-		<meta
-			property="og:image:alt"
-			content="JAlbarracín | Desarrollador Full Stack"
-		/>
-    <meta name="description" content="Welcome to Jorge Albarracin website, here you will find information about my professional career." />
-		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
-		<title>Albarracín Jorge | Developer</title>
-		<script defer src="https://umami.albarracin.dev/umatrackerscript.js" data-website-id="863c3243-1867-47f5-88e2-9c4943661ab6"></script>	</head>
-	<body class="dark:bg-zinc-950 dark:text-slate-100 flex flex-col">
-		<LoadingScreen />
+		<meta property="og:url" content={`${origin}/${lang}/`} />
+		<meta property="og:description" content={t.description} />
+		<meta property="og:locale" content={lang === "es" ? "es_AR" : "en_US"} />
+		<meta property="og:image" content={`${origin}/albarracin-website-social.png`} />
+		<meta property="og:image:alt" content={t.ogTitle} />
+		<link rel="canonical" href={`${origin}/${lang}/`} />
+		{locales.map((l) => <link rel="alternate" hreflang={l} href={`${origin}/${l}/`} />)}
+		<link rel="alternate" hreflang="x-default" href={`${origin}/`} />
+		<link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+		<script defer src="https://umami.albarracin.dev/umatrackerscript.js" data-website-id="863c3243-1867-47f5-88e2-9c4943661ab6"></script>
+	</head>
+	<body>
+		<nav class="lang-switch mono" aria-label={t.switchLabel}>
+			{locales.map((l, i) => (
+				<>
+					{i > 0 && <span aria-hidden="true">/</span>}
+					<a href={`/${l}/`} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>{l.toUpperCase()}</a>
+				</>
+			))}
+		</nav>
 		<slot />
 	</body>
 </html>
 
-<style>
-	@import url("https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap");
-	@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-
-	body {
-		font-family: "Open Sans", sans-serif;
-	}
-
+<style is:global>
+	.lang-switch { position: fixed; top: 18px; right: var(--gutter); z-index: 60; display: flex; gap: 8px; color: var(--muted); font-size: 12px; letter-spacing: .1em; }
+	.lang-switch a { transition: color .2s; }
+	.lang-switch a:hover { color: var(--text); }
+	.lang-switch a[aria-current] { color: var(--text); }
 </style>
