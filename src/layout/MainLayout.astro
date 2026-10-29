@@ -1,10 +1,9 @@
 ---
-import LoadingScreen from "../components/LoadingScreen.astro";
 import "../styles/global.css";
 ---
 
 <!doctype html>
-<html lang="en" class="dark snap-y snap-mandatory scroll-smooth">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,22 +25,15 @@ import "../styles/global.css";
 			property="og:image:alt"
 			content="JAlbarracín | Desarrollador Full Stack"
 		/>
-    <meta name="description" content="Welcome to Jorge Albarracin website, here you will find information about my professional career." />
+		<meta name="description" content="Trayectoria de Jorge Albarracín: del diseño gráfico a la ingeniería de software." />
 		<link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 		<title>Albarracín Jorge | Developer</title>
-		<script defer src="https://umami.albarracin.dev/umatrackerscript.js" data-website-id="863c3243-1867-47f5-88e2-9c4943661ab6"></script>	</head>
-	<body class="dark:bg-zinc-950 dark:text-slate-100 flex flex-col">
-		<LoadingScreen />
+		<script defer src="https://umami.albarracin.dev/umatrackerscript.js" data-website-id="863c3243-1867-47f5-88e2-9c4943661ab6"></script>
+	</head>
+	<body>
 		<slot />
 	</body>
 </html>
-
-<style>
-	@import url("https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap");
-	@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-
-	body {
-		font-family: "Open Sans", sans-serif;
-	}
-
-</style>

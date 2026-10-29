@@ -1,0 +1,47 @@
+---
+import { careerStart, companyCount } from '../data/career';
+---
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="mono eyebrow">Jorge Albarracín · Mendoza, AR</span>
+    <h1>Del diseño gráfico a la <span class="grad">ingeniería de software</span>.</h1>
+    <p>Empecé estudiando diseño en la UNCuyo, me pasé al desarrollo en 2018 y desde 2021 trabajo profesionalmente: agencias, producto, consultoras y hoy GlobalLogic. Esta es la historia, año por año.</p>
+    <div class="hero-stats">
+      <div><strong id="years" data-since={careerStart.join('-')}>5+</strong><span class="mono">años en la industria</span></div>
+      <div><strong>{companyCount}</strong><span class="mono">empresas</span></div>
+      <div><strong>2</strong><span class="mono">roles de liderazgo/mentoría</span></div>
+    </div>
+  </div>
+  <span class="scroll-hint mono">scroll ↓</span>
+</header>
+
+<script>
+  // Computed in the browser so the count doesn't freeze at build time.
+  const years = document.getElementById('years');
+  if (years?.dataset.since) {
+    const [y, m] = years.dataset.since.split('-').map(Number);
+    years.textContent = `${Math.floor((Date.now() - new Date(y, m - 1).getTime()) / (365.25 * 864e5))}+`;
+  }
+</script>
+
+<style>
+  .hero { min-height: 100svh; display: grid; place-items: center; padding: 80px var(--gutter); position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(circle, #6366f133, transparent 65%); top: -300px; right: -300px; filter: blur(20px); }
+  .hero::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 64px 64px; mask: radial-gradient(ellipse at center, #0008, transparent 70%); opacity: .35; }
+  .hero-inner { position: relative; z-index: 1; max-width: 1100px; width: 100%; }
+  .eyebrow { color: var(--indigo); letter-spacing: .12em; text-transform: uppercase; }
+  h1 { font-size: clamp(42px, 8vw, 112px); line-height: .98; font-weight: 800; letter-spacing: -.04em; margin: 20px 0 28px; }
+  .grad { background: linear-gradient(90deg, var(--indigo), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  p { font-size: clamp(17px, 1.6vw, 21px); color: var(--muted); max-width: 60ch; line-height: 1.6; font-weight: 300; }
+  .hero-stats { display: flex; gap: clamp(24px, 5vw, 64px); margin-top: 48px; flex-wrap: wrap; }
+  .hero-stats div { display: flex; flex-direction: column; gap: 4px; }
+  .hero-stats strong { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -.03em; }
+  .hero-stats span { color: var(--muted); }
+  .scroll-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); color: var(--muted); z-index: 1; animation: bob 2s infinite; }
+  @keyframes bob { 50% { transform: translate(-50%, 6px); } }
+
+  @media (max-width: 480px) {
+    .hero-stats { gap: 20px 28px; }
+  }
+</style>

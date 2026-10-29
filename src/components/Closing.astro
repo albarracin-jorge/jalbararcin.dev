@@ -1,0 +1,25 @@
+---
+import { links } from '../data/career';
+import cv from '../assets/curriculum-es.pdf?url';
+---
+
+<section class="close">
+  <h2>¿El próximo capítulo?<br />Hablemos.</h2>
+  <p>Abierto a conversar sobre proyectos, colaboraciones o simplemente sobre software.</p>
+  <div class="btns">
+    <a class="btn primary" href={`mailto:${links.email}`}>Escribime</a>
+    <a class="btn" href={links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a class="btn" href={links.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a class="btn" href={cv} target="_blank">CV (PDF)</a>
+  </div>
+</section>
+
+<style>
+  .close { padding: 80px var(--gutter) 120px; text-align: center; }
+  h2 { font-size: clamp(32px, 5vw, 64px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; }
+  p { color: var(--muted); margin: 20px auto 36px; max-width: 50ch; line-height: 1.6; }
+  .btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .btn { padding: 14px 22px; border-radius: 99px; border: 1px solid var(--line); font-weight: 600; transition: .25s; }
+  .btn.primary { background: linear-gradient(90deg, var(--indigo-2), var(--pink)); border: 0; }
+  .btn:hover { transform: translateY(-2px); border-color: var(--indigo); }
+</style>
