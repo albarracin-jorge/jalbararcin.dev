@@ -1,0 +1,17 @@
+---
+import { ui, type Locale } from '../i18n';
+
+const { lang } = Astro.props as { lang: Locale };
+const t = ui[lang];
+---
+
+<section class="nice">
+  <span class="mono label">{t.closeHintLabel}</span>
+  <p>{t.closeHint}</p>
+</section>
+
+<style>
+  .nice { padding: 64px var(--gutter); max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--line); }
+  .label { display: block; color: var(--indigo); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 14px; }
+  p { font-size: clamp(20px, 2.2vw, 26px); line-height: 1.45; letter-spacing: -.01em; font-weight: 300; max-width: 40ch; }
+</style>

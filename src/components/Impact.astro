@@ -1,17 +1,21 @@
 ---
 import { impact } from '../data/career';
+import { ui, type Locale } from '../i18n';
+
+const { lang } = Astro.props as { lang: Locale };
+const t = ui[lang];
 ---
 
 <section class="impact">
-  <h2 class="section-h">Impacto</h2>
-  <p class="section-sub">Lo que se repite en cada equipo por el que pasé.</p>
+  <h2 class="section-h">{t.impactTitle}</h2>
+  <p class="section-sub">{t.impactSub}</p>
   <div class="impact-grid">
     {
-      impact.map((i) => (
-        <div class="impact-card">
-          <div class="ic">{i.icon}</div>
-          <h3>{i.title}</h3>
-          <p>{i.text}</p>
+      impact.map((i, n) => (
+        <div class="impact-item">
+          <span class="mono n">{String(n + 1).padStart(2, '0')}</span>
+          <h3>{i.title[lang]}</h3>
+          <p>{i.text[lang]}</p>
         </div>
       ))
     }
@@ -20,16 +24,10 @@ import { impact } from '../data/career';
 
 <style>
   .impact { padding: 80px var(--gutter); max-width: 1180px; margin: 0 auto; }
-  .impact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .impact-card { padding: 28px 24px; border-radius: 18px; border: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; gap: 16px; }
-  .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--indigo-2), var(--pink)); font-size: 20px; }
-  h3 { font-size: 18px; letter-spacing: -.01em; }
-  p { color: var(--muted); line-height: 1.55; font-size: 15px; font-weight: 300; }
+  .impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 32px; }
+  .impact-item { padding-top: 20px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .n { color: var(--indigo); }
+  h3 { font-size: 17px; letter-spacing: -.01em; }
+  p { color: var(--muted); line-height: 1.6; font-size: 15px; font-weight: 300; }
 
-  @media (max-width: 760px) {
-    .impact-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 480px) {
-    .impact-grid { grid-template-columns: 1fr; }
-  }
 </style>
