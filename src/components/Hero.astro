@@ -72,7 +72,8 @@ const t = ui[lang];
 
   @media (max-width: 860px) {
     .copy { max-width: min(640px, 100%); }
-    .photo { width: 100%; opacity: .35; -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, #000 20%, transparent 80%); mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, #000 20%, transparent 80%); }
+    /* No portrait on small screens. It is only hidden, so the (~110 KB) file is still downloaded. */
+    .photo { display: none; }
   }
   @media (max-width: 480px) { .facts { grid-template-columns: 1fr; } }
 </style>
