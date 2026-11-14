@@ -3,15 +3,138 @@ import { ui, type Locale } from '../i18n';
 
 const { lang } = Astro.props as { lang: Locale };
 const t = ui[lang];
+
+// Pixel critter, 11x10. b = body, d = dark shade, e = eye. Legs have two frames that alternate while it idles.
+const body = [
+  '..d.....d..',
+  '...b...b...',
+  '..bbbbbbb..',
+  '.bbbbbbbbb.',
+  'bbeebbbeebb',
+  'bbeebbbeebb',
+  'bbbbbbbbbbb',
+  '.bbbdddbbb.',
+];
+const legsA = ['.b.b...b.b.', 'b...b.b...b'];
+const legsB = ['..b.b.b.b..', '.b.......b.'];
+const px = (rows: string[], y0: number, only?: string) =>
+  rows.flatMap((r, y) => [...r].flatMap((c, x) => (c !== '.' && (!only || only.includes(c)) ? [{ x, y: y + y0, c }] : [])));
 ---
 
-<section class="nice">
-  <span class="mono label">{t.closeHintLabel}</span>
-  <p>{t.closeHint}</p>
-</section>
+<!-- Easter egg: drops in from the top of the viewport when the contact section shows up, and carries the "nice to know" note. -->
+<div class="critter-stage" id="critter-stage" hidden>
+  <div class="shadow"></div>
+  <button class="critter" type="button" aria-label={t.closeHintLabel} aria-expanded="false" aria-controls="critter-note">
+    <svg viewBox="0 0 11 10" aria-hidden="true">
+      {px(body, 0, 'bd').map((p) => <rect x={p.x} y={p.y} width="1" height="1" class={p.c} />)}
+      <g class="eyes">{px(body, 0, 'e').map((p) => <rect x={p.x} y={p.y} width="1" height="1" class="e" />)}</g>
+      <g class="legs-a">{px(legsA, 8).map((p) => <rect x={p.x} y={p.y} width="1" height="1" class="b" />)}</g>
+      <g class="legs-b">{px(legsB, 8).map((p) => <rect x={p.x} y={p.y} width="1" height="1" class="b" />)}</g>
+    </svg>
+  </button>
+  <div class="note" id="critter-note" role="status" hidden>
+    <span class="mono">{t.closeHintLabel}</span>
+    {t.closeHint}
+  </div>
+</div>
+
+<script>
+  const stage = document.getElementById('critter-stage');
+  const contact = document.getElementById('contact');
+  const desktop = matchMedia('(min-width: 861px)');
+
+  if (stage && contact) {
+    const critter = stage.querySelector<HTMLButtonElement>('.critter')!;
+    const shadow = stage.querySelector<HTMLElement>('.shadow')!;
+    const note = stage.querySelector<HTMLElement>('.note')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let state: 'idle' | 'falling' | 'landed' = 'idle';
+
+    const setNote = (open: boolean) => { note.hidden = !open; critter.setAttribute('aria-expanded', String(open)); };
+
+    const land = () => { state = 'landed'; stage.classList.add('walk'); setNote(true); };
+
+    const drop = () => {
+      state = 'falling';
+      stage.hidden = false;
+      if (reduce) { stage.animate([{ opacity: 0 }, { opacity: 1 }], 300); return land(); }
+      const H = innerHeight;
+      const fall = 'cubic-bezier(.5,0,1,.6)', rise = 'cubic-bezier(0,.4,.5,1)';
+      // Heights in px above the floor, plus squash and stretch on each contact.
+      const frames: [number, number, string, string?][] = [
+        [0, H + 40, 'scale(.95,1.1)', fall],
+        [.40, 0, 'scale(1.35,.65)', 'ease-out'],
+        [.45, 8, 'scale(.9,1.12)', rise],
+        [.62, H * .32, 'scale(1,1)', fall],
+        [.76, 0, 'scale(1.22,.8)', rise],
+        [.86, H * .1, 'scale(1,1)', fall],
+        [.93, 0, 'scale(1.1,.9)', rise],
+        [.97, H * .02, 'scale(1,1)', fall],
+        [1, 0, 'scale(1,1)'],
+      ];
+      const opts = { duration: 1500, fill: 'forwards' as const };
+      critter.animate(frames.map(([offset, h, s, easing]) => ({ offset, transform: `translateY(${-h}px) ${s}`, easing })), opts).finished.then(land);
+      // The shadow grows as the critter gets close to the floor.
+      shadow.animate(frames.map(([offset, h, , easing]) => {
+        const k = Math.min(h / (H * .5), 1);
+        return { offset, opacity: .55 * (1 - k), transform: `scaleX(${1 - .6 * k})`, easing };
+      }), opts);
+    };
+
+    critter.addEventListener('click', () => {
+      if (state !== 'landed') return;
+      setNote(note.hidden);
+      if (reduce) return;
+      critter.animate([
+        { transform: 'translateY(0) scale(1.15,.85)', easing: 'cubic-bezier(0,.4,.5,1)' },
+        { offset: .45, transform: 'translateY(-34px) scale(.95,1.06)', easing: 'cubic-bezier(.5,0,1,.6)' },
+        { offset: .85, transform: 'translateY(0) scale(1.15,.85)' },
+        { transform: 'translateY(0) scale(1,1)' },
+      ], 520);
+    });
+
+    // Drops once, the first time contact is on screen. Afterwards it fades out when contact leaves and back in when it returns.
+    new IntersectionObserver(([e]) => {
+      if (!desktop.matches) return;
+      if (e.isIntersecting && state === 'idle') drop();
+      else if (state === 'landed') stage.classList.toggle('away', !e.isIntersecting);
+    }, { threshold: .35 }).observe(contact);
+  }
+</script>
 
 <style>
-  .nice { padding: 64px var(--gutter); max-width: 1180px; margin: 0 auto; border-top: 1px solid var(--line); }
-  .label { display: block; color: var(--indigo); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 14px; }
-  p { font-size: clamp(20px, 2.2vw, 26px); line-height: 1.45; letter-spacing: -.01em; font-weight: 300; max-width: 40ch; }
+  .critter-stage { position: fixed; left: 10vw; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); width: 66px; z-index: 40; transition: opacity .3s ease; }
+  .critter-stage[hidden] { display: none; }
+  .critter-stage.away { opacity: 0; pointer-events: none; }
+  /* Not shown on small screens, same breakpoint where the hero portrait goes away. */
+  @media (max-width: 860px) { .critter-stage { display: none; } }
+
+  .critter { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; transform-origin: 50% 100%; }
+  .critter:focus-visible { outline: 2px solid var(--indigo); outline-offset: 6px; border-radius: 6px; }
+  .critter svg { display: block; width: 100%; height: auto; shape-rendering: crispEdges; overflow: visible; }
+  .b { fill: #a78bfa; }
+  .d { fill: #6d4fd8; }
+  .e { fill: #f5f3ff; }
+  .eyes { transform-box: fill-box; transform-origin: center; animation: blink 3.6s infinite; }
+  .legs-b { display: none; }
+  .walk .legs-a { animation: leg-a .5s steps(1) infinite; }
+  .walk .legs-b { display: inline; animation: leg-b .5s steps(1) infinite; }
+  @keyframes leg-a { 50% { opacity: 0; } }
+  @keyframes leg-b { 0% { opacity: 0; } 50% { opacity: 1; } }
+  @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+
+  .shadow { position: absolute; left: 0; right: 0; bottom: -6px; height: 8px; border-radius: 50%; background: rgba(0, 0, 0, .55); filter: blur(2px); opacity: 0; }
+
+  /* Speech bubble above the critter, tail on its left side. */
+  .note { position: absolute; left: -8px; bottom: 82px; width: 280px; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    font-size: 13.5px; line-height: 1.5; font-weight: 300; box-shadow: 0 16px 40px rgba(0, 0, 0, .45); transform-origin: 15% 100%; animation: pop .22s cubic-bezier(.2,.7,.2,1); }
+  .note::after { content: ""; position: absolute; bottom: -7px; left: 32px; width: 12px; height: 12px; background: var(--panel); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transform: rotate(45deg); }
+  .note .mono { display: block; font-size: 10.5px; color: #a78bfa; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  @keyframes pop { from { opacity: 0; transform: scale(.9) translateY(6px); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eyes, .walk .legs-a, .walk .legs-b { animation: none; }
+    .walk .legs-b { display: none; }
+    .note { animation: none; }
+  }
 </style>
